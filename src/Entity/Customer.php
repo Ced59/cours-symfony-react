@@ -2,12 +2,24 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CustomerRepository")
+ * @ApiResource(
+ *     normalizationContext={
+ *           "groups"={"customers_read"}
+ *     }
+ * )
+ * @ApiFilter(SearchFilter::class, properties={"firstName":"partial", "lastName":"partial", "company":"partial"})
+ * @ApiFilter(OrderFilter::class)
  */
 class Customer
 {
@@ -15,6 +27,7 @@ class Customer
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"customers_read"})
      */
     private $id;
 
