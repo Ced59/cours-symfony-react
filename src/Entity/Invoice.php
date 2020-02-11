@@ -62,6 +62,19 @@ class Invoice
      */
     private $chrono;
 
+    /**
+     * Permet de récupérer le User à qui appartient la facture
+     * @Groups({"invoices_read"})
+     * @return User
+     */
+    public function getUser() : User
+    {
+        return $this->customer->getUser();
+    }
+
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;

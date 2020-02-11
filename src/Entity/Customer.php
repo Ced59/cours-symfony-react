@@ -16,7 +16,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     normalizationContext={
  *           "groups"={"customers_read"}
- *     }
+ *     },
+ *     collectionOperations={"GET"={"path"="/clients"}, "POST"},
+ *     itemOperations={"GET"={"path"="/clients/{id}"}, "PUT", "DELETE", "PATCH"}
  * )
  * @ApiFilter(SearchFilter::class, properties={"firstName":"partial", "lastName":"partial", "company":"partial"})
  * @ApiFilter(OrderFilter::class)
@@ -72,16 +74,52 @@ class Customer
         $this->invoices = new ArrayCollection();
     }
 
+    /**
+     * Permet de récupérer le total des invoices
+     * @Groups({"customers_read"})
+     * @return float
+     */
+    public function getTotalAmount(): float
+    {
+        return array_reduce($this->invoices->toArray(), function ($total, $invoice) {
+            return $total + $invoice->getAmount();
+        }, 0
+        );
+    }
+
+    /**
+     * Permet de récupérer le total des invoices dues
+     * @Groups({"customers_read"})
+     * @return float
+     */
+    public function getUnpaidAmount(): float
+    {
+        return array_reduce($this->invoices->toArray(), function ($total, $invoice) {
+            return $total + ($invoice->getStatus() === "PAID" || $invoice->getStatus() === "CANCELLED" ? 0 : $invoice->getAmount());
+        }, 0);
+    }
+
+
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return string|null
+     */
     public function getFirstName(): ?string
     {
         return $this->firstName;
     }
 
+    /**
+     * @param string $firstName
+     * @return $this
+     */
     public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;
@@ -89,11 +127,18 @@ class Customer
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getLastName(): ?string
     {
         return $this->lastName;
     }
 
+    /**
+     * @param string $lastName
+     * @return $this
+     */
     public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
@@ -101,11 +146,18 @@ class Customer
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
+    /**
+     * @param string $email
+     * @return $this
+     */
     public function setEmail(string $email): self
     {
         $this->email = $email;
@@ -113,11 +165,18 @@ class Customer
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCompany(): ?string
     {
         return $this->company;
     }
 
+    /**
+     * @param string|null $company
+     * @return $this
+     */
     public function setCompany(?string $company): self
     {
         $this->company = $company;
@@ -133,6 +192,10 @@ class Customer
         return $this->invoices;
     }
 
+    /**
+     * @param Invoice $invoice
+     * @return $this
+     */
     public function addInvoice(Invoice $invoice): self
     {
         if (!$this->invoices->contains($invoice)) {
@@ -143,6 +206,10 @@ class Customer
         return $this;
     }
 
+    /**
+     * @param Invoice $invoice
+     * @return $this
+     */
     public function removeInvoice(Invoice $invoice): self
     {
         if ($this->invoices->contains($invoice)) {
@@ -156,11 +223,18 @@ class Customer
         return $this;
     }
 
+    /**
+     * @return User|null
+     */
     public function getUser(): ?User
     {
         return $this->user;
     }
 
+    /**
+     * @param User|null $user
+     * @return $this
+     */
     public function setUser(?User $user): self
     {
         $this->user = $user;
