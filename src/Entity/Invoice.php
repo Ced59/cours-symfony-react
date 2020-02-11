@@ -67,7 +67,7 @@ class Invoice
      * @Groups({"invoices_read"})
      * @return User
      */
-    public function getUser() : User
+    public function getUser(): User
     {
         return $this->customer->getUser();
     }
