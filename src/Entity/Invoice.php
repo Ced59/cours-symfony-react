@@ -80,11 +80,18 @@ class Invoice
         return $this->id;
     }
 
+    /**
+     * @return float|null
+     */
     public function getAmount(): ?float
     {
         return $this->amount;
     }
 
+    /**
+     * @param float $amount
+     * @return $this
+     */
     public function setAmount(float $amount): self
     {
         $this->amount = $amount;
@@ -92,11 +99,18 @@ class Invoice
         return $this;
     }
 
+    /**
+     * @return \DateTimeInterface|null
+     */
     public function getSentAt(): ?\DateTimeInterface
     {
         return $this->sentAt;
     }
 
+    /**
+     * @param \DateTimeInterface $sentAt
+     * @return $this
+     */
     public function setSentAt(\DateTimeInterface $sentAt): self
     {
         $this->sentAt = $sentAt;
@@ -104,11 +118,18 @@ class Invoice
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getStatus(): ?string
     {
         return $this->status;
     }
 
+    /**
+     * @param string $status
+     * @return $this
+     */
     public function setStatus(string $status): self
     {
         $this->status = $status;
@@ -116,11 +137,18 @@ class Invoice
         return $this;
     }
 
+    /**
+     * @return Customer|null
+     */
     public function getCustomer(): ?Customer
     {
         return $this->customer;
     }
 
+    /**
+     * @param Customer|null $customer
+     * @return $this
+     */
     public function setCustomer(?Customer $customer): self
     {
         $this->customer = $customer;
@@ -128,11 +156,18 @@ class Invoice
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getChrono(): ?int
     {
         return $this->chrono;
     }
 
+    /**
+     * @param int $chrono
+     * @return $this
+     */
     public function setChrono(int $chrono): self
     {
         $this->chrono = $chrono;
