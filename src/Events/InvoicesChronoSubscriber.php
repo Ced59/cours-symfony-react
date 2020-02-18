@@ -3,15 +3,29 @@
 namespace App\Events;
 
 use ApiPlatform\Core\EventListener\EventPriorities;
+use App\Entity\Invoice;
+use App\Repository\InvoiceRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Class InvoicesChronoSubscriber
  * @package App\Events
  */
 class InvoicesChronoSubscriber implements EventSubscriberInterface {
+    private $security;
+    private $invoiceRepository;
+
+    public function __construct(Security $security, InvoiceRepository $invoiceRepository)
+    {
+        $this->security = $security;
+        $this->invoiceRepository = $invoiceRepository;
+    }
+
     /**
      * Returns an array of event names this subscriber wants to listen to.
      *
@@ -33,15 +47,25 @@ class InvoicesChronoSubscriber implements EventSubscriberInterface {
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::VIEW => 'setChronoForInvoices', EventPriorities::PRE_VALIDATE
+            KernelEvents::VIEW => ['setChronoForInvoices', EventPriorities::PRE_VALIDATE]
         ];
     }
 
     /**
      * @param ViewEvent $event
+     * @throws NoResultException
+     * @throws NonUniqueResultException
      */
     public function setChronoForInvoices(ViewEvent $event): void
     {
-        dd($event->getControllerResult());
+        $invoice = $event->getControllerResult();
+        $method = $event->getRequest()->getMethod();
+
+        if ($invoice instanceof Invoice && $method === "POST") {
+            $nextChrono = $this->invoiceRepository->findNextChrono($this->security->getUser());
+            $invoice->setChrono((int)$nextChrono);
+
+            dd($invoice);
+        }
     }
 }

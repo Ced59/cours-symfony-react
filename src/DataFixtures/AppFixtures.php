@@ -37,7 +37,7 @@ class AppFixtures extends Fixture
 
         for ($u = 0; $u < 100; $u++) {
             $user = new User();
-
+            
             $chrono = 1;
 
             $hash = $this->encoder->encodePassword($user, "password");
