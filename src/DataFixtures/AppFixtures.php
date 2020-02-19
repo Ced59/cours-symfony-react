@@ -64,7 +64,7 @@ class AppFixtures extends Fixture
 
                     $manager->persist($customer);
 
-                    for ($i = 0, $iMax = random_int(1, 100); $i < $iMax; $i++) {
+                    for ($i = 0, $iMax = random_int(0, 30); $i < $iMax; $i++) {
                         $invoice = new Invoice();
                         $invoice->setAmount($faker->randomFloat(2, 250, 5000))
                             ->setSentAt($faker->dateTimeBetween('-6 months'))
