@@ -9,6 +9,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
+use phpDocumentor\Reflection\Types\Integer;
 
 /**
  * @method Invoice|null find($id, $lockMode = null, $lockVersion = null)
@@ -25,17 +26,18 @@ class InvoiceRepository extends ServiceEntityRepository
 
     /**
      * @param User $user
-     * @return QueryBuilder
+     * @return int
      * @throws NoResultException
      * @throws NonUniqueResultException
      */
-    public function findNextChrono(User $user){
-        return $this->createQueryBuilder("i")
-            ->select("i.chrono")
-            ->join("i.customer", "c")
-            ->where("c.user = :user")
-            ->setParameter("user", $user)
-            ->orderBy("i.chrono", "DESC")
+    public function findNextChrono(User $user): int
+    {
+        return $this->createQueryBuilder('i')
+            ->select('i.chrono')
+            ->join('i.customer', 'c')
+            ->where('c.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('i.chrono', 'DESC')
             ->setMaxResults(1)
             ->getQuery()
             ->getSingleScalarResult() + 1;
