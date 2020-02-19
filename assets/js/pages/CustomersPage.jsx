@@ -4,6 +4,7 @@ import axios from 'axios';
 const CustomersPage = (props) => {
 
     const [customers, setCustomers] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
 
@@ -23,12 +24,26 @@ const CustomersPage = (props) => {
         axios.delete("http://localhost:8000/api/customers/" + id)
             .then(response => console.log("Suppression ok"))
             .catch(error => {
-               setCustomers(originalCustomers);
-               console.log(error.response);
+                setCustomers(originalCustomers);
+                console.log(error.response);
             });
     };
 
+    const handleChangePage = (page) => {
+        setCurrentPage(page);
+    };
 
+
+    const itemsPerPage = 20;
+    const pagesCount = Math.ceil(customers.length / itemsPerPage);
+    const pages = [];
+
+    for (let i = 1; i <= pagesCount; i++) {
+        pages.push(i);
+    }
+
+    const start = currentPage * itemsPerPage - itemsPerPage;
+    const paginatedCustomers = customers.slice(start, start + itemsPerPage);
 
     return (
         <>
@@ -50,7 +65,7 @@ const CustomersPage = (props) => {
                 </thead>
                 <tbody>
 
-                {customers.map(customer =>
+                {paginatedCustomers.map(customer =>
                     <tr key={customer.id}>
                         <td>{customer.id}</td>
                         <td><a href="#">{customer.firstName} {customer.lastName}</a></td>
@@ -78,6 +93,36 @@ const CustomersPage = (props) => {
 
                 </tbody>
             </table>
+
+            <div>
+                <ul className="pagination pagination-sm">
+                    <li className={"page-item" + (currentPage === 1 && " disabled")}>
+                        <button
+                            className="page-link"
+                            onClick={() => handleChangePage(currentPage - 1)}
+                        >
+                            &laquo;
+                        </button>
+                    </li>
+
+                    {pages.map(page => (
+                        <li
+                            key={page}
+                            className={"page-item" + (currentPage === page ? " active" : "")}
+                        >
+                            <button className="page-link" onClick={() => handleChangePage(page)}>
+                                {page}
+                            </button>
+                        </li>
+                    ))}
+
+
+                    <li className={"page-item" + (currentPage === pagesCount && " disabled")}>
+                        <button className="page-link" onClick={() => handleChangePage(currentPage + 1)}>&raquo;</button>
+                    </li>
+                </ul>
+            </div>
+
         </>
     );
 };
