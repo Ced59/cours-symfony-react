@@ -54,7 +54,7 @@ class AppFixtures extends Fixture
             $manager->persist($user);
 
             try {
-                for ($c = 0, $cMax = random_int(5, 100); $c < $cMax; $c++) {
+                for ($c = 0, $cMax = random_int(5, 10); $c < $cMax; $c++) {
                     $customer = new Customer();
                     $customer->setFirstName($faker->firstName)
                         ->setLastName($faker->lastName)
@@ -80,7 +80,6 @@ class AppFixtures extends Fixture
 
                         $manager->persist($invoice);
                     }
-
                 }
             } catch (\Exception $e) {
             }
