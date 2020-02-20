@@ -2,11 +2,14 @@
   <dictionary name="valareppao6">
     <words>
       <w>appartient</w>
+      <w>axios</w>
+      <w>caudron</w>
       <w>chrono</w>
       <w>facture</w>
       <w>navbar</w>
       <w>permet</w>
       <w>récupérer</w>
+      <w>suppprimer</w>
     </words>
   </dictionary>
 </component>

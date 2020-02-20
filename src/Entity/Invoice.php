@@ -18,12 +18,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          }
  *     },
  *     attributes={
- *           "pagination_enabled"=true,
+ *           "pagination_enabled"=false,
  *            "pagination_items_per_page"=30,
  *     "order": {
  *           "sentAt":"desc"
  *     }},
- *     normalizationContext={"groups"={"invoices_read", "customers_read"}},
+ *     normalizationContext={"groups"={"invoices_read"}},
  *     denormalizationContext={"disable_type_enforcement"=true}
  * )
  * @ApiFilter(OrderFilter::class, properties={"amount", "sentAt"})
