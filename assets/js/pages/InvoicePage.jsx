@@ -3,8 +3,8 @@ import Field from "../components/forms/Field";
 import Select from "../components/forms/Select";
 import {Link} from "react-router-dom";
 import InvoicesAPI from "../services/invoicesAPI";
-import axios from "axios";
 import CustomersAPI from "../services/customersAPI";
+import {toast} from "react-toastify";
 
 const InvoicePage = ({history, match}) => {
 
@@ -43,9 +43,11 @@ const InvoicePage = ({history, match}) => {
 
                 if (editing) {
                     await InvoicesAPI.edit(id, invoice);
+                    toast.success("La facture a bien été mise à jour !");
 
                 } else {
                     await InvoicesAPI.create(invoice);
+                    toast.success("La facture a bien été créée!");
                     history.replace("/invoices");
                 }
 
@@ -60,6 +62,7 @@ const InvoicePage = ({history, match}) => {
                         apiErrors[propertyPath] = message;
                     });
                     setErrors(apiErrors);
+                    toast.error("Un problème est survenu!");
                 }
             }
         };
@@ -75,6 +78,7 @@ const InvoicePage = ({history, match}) => {
                 }
 
             } catch (error) {
+                toast.error("Impossible de charger les clients");
                 history.replace("/invoices");
             }
         };
@@ -88,6 +92,7 @@ const InvoicePage = ({history, match}) => {
 
                 setInvoice({amount, status, customer: customer.id});
             } catch (error) {
+                toast.error("Impossible de charger la facture.");
                 history.replace("/invoices");
             }
         };

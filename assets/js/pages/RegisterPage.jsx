@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import Field from "../components/forms/Field";
 import {Link} from "react-router-dom";
 import UsersAPI from "../services/usersAPI";
+import {toast} from "react-toastify";
 
 const RegisterPage = ({history}) => {
 
@@ -43,6 +44,7 @@ const RegisterPage = ({history}) => {
         try {
             await UsersAPI.create(user);
             setErrors({});
+            toast.success("Inscription réussie!");
             history.replace('/login');
         }
         catch (e) {
@@ -57,6 +59,7 @@ const RegisterPage = ({history}) => {
                 });
                 setErrors(apiErrors);
             }
+            toast.error("Il y a des erreurs dans le formulaire");
 
         }
 

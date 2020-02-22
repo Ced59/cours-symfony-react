@@ -3,6 +3,7 @@ import axios from "axios";
 import AuthAPI from "../services/AuthAPI";
 import AuthContext from "../contexts/AuthContext";
 import Field from "../components/forms/Field";
+import {toast} from "react-toastify";
 
 
 const LoginPage = ({history}) => {
@@ -33,10 +34,12 @@ const LoginPage = ({history}) => {
             await AuthAPI.authenticate(credentials);
             setError("");
             setIsAuthenticated(true);
+            toast.success("Vous êtes connnécté en tant que " + credentials.username  + "!");
             history.replace("/customers");
 
         } catch (error) {
             setError("Les informations de login/mot de passe sont incorrectes");
+            toast.error("Une erreur est survenue");
         }
     };
 
