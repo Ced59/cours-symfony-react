@@ -12,6 +12,7 @@ import LoginPage from "./pages/LoginPage";
 import AuthAPI from "./services/AuthAPI";
 import AuthContext from "./contexts/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
+import CustomerPage from "./pages/CustomerPage";
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to import it.
 // import $ from 'jquery';
@@ -50,8 +51,10 @@ const App = () => {
                     <Switch>
                         <Route path="/login" component={LoginPage}/>
 
+                        <PrivateRoute path="/customers/:id" component={CustomerPage}/>
                         <PrivateRoute path="/customers" component={CustomersPage}/>
                         <PrivateRoute path="/invoices" component={InvoicesPage}/>
+
 
 
                         <Route path="/" component={HomePage}/>

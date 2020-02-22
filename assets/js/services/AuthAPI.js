@@ -61,12 +61,13 @@ function setup()
         const jwtData = jwtDecode(token);
         if (jwtData.exp * 1000 > new Date().getTime())
         {
+            // donner token a axios
             setAxiosToken(token);
         }
     }
 
 
-    // donner token a axios
+
 }
 
 
