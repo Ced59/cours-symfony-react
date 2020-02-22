@@ -3,6 +3,7 @@ import Pagination from "../components/Pagination";
 import moment from "moment";
 
 import InvoicesAPI from "../services/invoicesAPI";
+import AuthContext from "../contexts/AuthContext";
 
 const STATUS_CLASSES = {
     PAID: "success",
@@ -23,6 +24,7 @@ const InvoicesPage = (props) => {
     const [invoices, setInvoices] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [search, setSearch] = useState("");
+
 
 
     // Récupération invoices

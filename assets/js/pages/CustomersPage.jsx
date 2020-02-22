@@ -1,13 +1,15 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import Pagination from "../components/Pagination";
 
 import CustomersAPI from "../services/customersAPI";
+
 
 const CustomersPage = (props) => {
 
     const [customers, setCustomers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [search, setSearch] = useState('');
+
 
     // Permet de récupérer les customers
     const fetchCustomers = async () => {

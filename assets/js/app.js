@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, {useContext, useState} from 'react';
 import ReactDOM from "react-dom";
 
 // any CSS you import will output into a single css file (app.css in this case)
 import '../css/app.css';
 import Navbar from "./components/Navbar";
 import HomePage from "./pages/HomePage";
-import {HashRouter , Switch, Route, withRouter} from "react-router-dom";
+import {HashRouter, Switch, Route, withRouter, Redirect} from "react-router-dom";
 import CustomersPage from "./pages/CustomersPage";
 import InvoicesPage from "./pages/InvoicesPage";
 import LoginPage from "./pages/LoginPage";
 import AuthAPI from "./services/AuthAPI";
+import AuthContext from "./contexts/AuthContext";
+import PrivateRoute from "./components/PrivateRoute";
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to import it.
 // import $ from 'jquery';
@@ -23,29 +25,43 @@ require("../css/app.css");
 AuthAPI.setup();
 
 
+
+
 const App = () => {
 
     const NavbarWithRouter = withRouter(Navbar);
 
     const [isAuthenticated, setIsAuthenticated] = useState(AuthAPI.isAuthenticated());
 
+    const contextValue = {
+        isAuthenticated: isAuthenticated,
+        setIsAuthenticated: setIsAuthenticated
+    };
+
     return (
-    <HashRouter>
+        <AuthContext.Provider value={contextValue}>
 
-        <NavbarWithRouter isAuthenticated={isAuthenticated} onLogout={setIsAuthenticated}/>
+            <HashRouter>
 
-        <main className="container pt-5">
+                <NavbarWithRouter/>
 
-            <Switch>
-                <Route path="/login" render={(props) => <LoginPage onLogin={setIsAuthenticated} {...props}/>} />
-                <Route path="/customers" component={CustomersPage} />
-                <Route path="/invoices" component={InvoicesPage} />
-                <Route path="/" component={HomePage} />
-            </Switch>
+                <main className="container pt-5">
 
-        </main>
+                    <Switch>
+                        <Route path="/login" component={LoginPage}/>
 
-    </HashRouter>);
+                        <PrivateRoute path="/customers" component={CustomersPage}/>
+                        <PrivateRoute path="/invoices" component={InvoicesPage}/>
+
+
+                        <Route path="/" component={HomePage}/>
+                    </Switch>
+
+                </main>
+
+            </HashRouter>
+        </AuthContext.Provider>
+    );
 };
 
 const rootElement = document.querySelector('#app');
