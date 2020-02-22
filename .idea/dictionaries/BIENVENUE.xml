@@ -4,6 +4,9 @@
       <w>adresse</w>
       <w>authentification</w>
       <w>authentifié</w>
+      <w>besoin</w>
+      <w>changements</w>
+      <w>chaque</w>
       <w>chargement</w>
       <w>création</w>
       <w>créer</w>
@@ -12,24 +15,37 @@
       <w>défaut</w>
       <w>enregistrer</w>
       <w>entreprise</w>
+      <w>extrait</w>
       <w>factures</w>
       <w>famille</w>
+      <w>filtrage</w>
+      <w>fois</w>
+      <w>fonction</w>
+      <w>formulaire</w>
       <w>gestion</w>
       <w>incorrectes</w>
       <w>informations</w>
       <w>liste</w>
       <w>lors</w>
       <w>mise</w>
+      <w>montant</w>
+      <w>numéro</w>
       <w>positionne</w>
       <w>prénom</w>
+      <w>rechercher</w>
       <w>requête</w>
       <w>requêtes</w>
       <w>retour</w>
+      <w>récupération</w>
       <w>sont</w>
+      <w>souhaitées</w>
+      <w>soumission</w>
+      <w>statut</w>
       <w>stockage</w>
       <w>stocke</w>
       <w>valide</w>
       <w>voir</w>
+      <w>vérifie</w>
     </words>
   </dictionary>
 </component>

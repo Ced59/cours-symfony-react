@@ -1,9 +1,12 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Field from "../components/forms/Field";
 import {Link} from "react-router-dom";
-import axios from "axios";
+import customersAPI from "../services/customersAPI";
 
-const CustomerPage = (props) => {
+const CustomerPage = ({match, history}) => {
+
+    const {id = "new"} = match.params;
+
 
     const [customer, setCustomer] = useState({
         lastName: "",
@@ -19,25 +22,66 @@ const CustomerPage = (props) => {
         company: ""
     });
 
+    const [editing, setEditing] = useState(false);
+
+
+    // Récupération du customer en fonction de l'id
+    const fetchCustomer = async id => {
+        try {
+
+            //On extrait de data les données souhaitées
+            const {firstName, lastName, email, company} = await customersAPI.find(id);
+
+            setCustomer({firstName, lastName, email, company});
+        }
+        catch(error)
+        {
+            console.log(error.response);
+
+            history.replace('/customers');
+        }
+    };
+
+    //vérifie si mode edition à chaque fois que id change et charge le customer si besoin
+    useEffect(() => {
+        if (id !== "new") {
+            setEditing(true);
+            fetchCustomer(id).then(r => "");
+        }
+    }, [id]);
+
+
+    //Gestion des changements des input dans le formulaire
     const handleChange = ({currentTarget}) => {
         const {name, value} = currentTarget;
         setCustomer({...customer, [name]: value});
     };
 
+    //Gestion de la soumission du formulaire
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         try {
-            const response = await axios.post("http://localhost:8000/api/customers", customer);
-            setErrors({});
-        }
-        catch(error)
-        {
-            if(error.response.data.violations)
+            if (editing)
             {
+                await customersAPI.update(id, customer);
+            }
+            else
+            {
+                await customersAPI.create(customer);
+
+                history.replace("/customers");
+            }
+
+            setErrors({});
+        } catch ({response}) {
+
+            const {violations} = response.data;
+
+            if (violations) {
                 const apiErrors = {};
-                error.response.data.violations.forEach(violation => {
-                    apiErrors[violation.propertyPath] = violation.message;
+                violations.forEach(({propertyPath, message}) => {
+                    apiErrors[propertyPath] = message;
                 });
                 setErrors(apiErrors);
             }
@@ -47,7 +91,7 @@ const CustomerPage = (props) => {
 
     return (
         <>
-            <h1>Création d'un client</h1>
+            {!editing && <h1>Création d'un client</h1> || <h1>Edition d'un client</h1>}
 
             <form onSubmit={handleSubmit}>
                 <Field
